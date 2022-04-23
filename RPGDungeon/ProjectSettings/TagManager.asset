@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
+  - Spawner
   layers:
   - Default
   - TransparentFX
@@ -40,4 +42,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Objects
+    uniqueID: 1247988221
+    locked: 0
+  - name: Enemy
+    uniqueID: 1872211649
+    locked: 0
+  - name: Weapon
+    uniqueID: 751578523
+    locked: 0
+  - name: Player
+    uniqueID: 1891274543
     locked: 0
