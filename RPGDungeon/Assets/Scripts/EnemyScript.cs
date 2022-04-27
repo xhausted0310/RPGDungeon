@@ -5,9 +5,9 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] private float _range;
     [SerializeField] private float _speed;
     [SerializeField] private int _health = 50;
-    [SerializeField] private Transform _target;
     [SerializeField] private Sprite _deathSprite;
 
+    private Transform _target;
     private float _minDistance = 5.0f;
     private float _thrust = 1.5f;
     private bool _isCollide = false;
@@ -18,8 +18,9 @@ public class EnemyScript : MonoBehaviour
 
     private void Start()
     {
-        int rnd = UnityEngine.Random.Range(0, sprites.Length);
+        int rnd = Random.Range(0, sprites.Length);
         GetComponent<SpriteRenderer>().sprite = sprites[rnd];
+        _target = GameObject.Find("Player").transform;
     }
 
     void Update()
@@ -67,6 +68,7 @@ public class EnemyScript : MonoBehaviour
     void FalseCollision()
     {
         _isCollide = false;
+        GetComponent<Rigidbody2D>().velocity = Vector3.zero;
     }
     public void TakeDamage(int damage)
     {
@@ -76,7 +78,9 @@ public class EnemyScript : MonoBehaviour
         if (_health<=0)
         {
             _isDead = true;
+            GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             GetComponent<SpriteRenderer>().sprite = _deathSprite;
+            GetComponent<SpriteRenderer>().sortingOrder = -1;
             GetComponent<Collider2D>().enabled = false;
             Invoke("EnemyDeath", 1.0f);
 
@@ -91,6 +95,7 @@ public class EnemyScript : MonoBehaviour
     {
         Destroy(transform.GetChild(0).gameObject);
         Destroy(gameObject);
+        _target.GetComponent<PlayerMovement>().GainExperience(5);
     }
 
     public float GetEnemyDamage()
