@@ -7,6 +7,8 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] private int _health = 50;
     [SerializeField] private Sprite _deathSprite;
 
+
+    private GameManager _gameManager;
     private Transform _target;
     private float _minDistance = 5.0f;
     private float _thrust = 1.5f;
@@ -18,6 +20,7 @@ public class EnemyScript : MonoBehaviour
 
     private void Start()
     {
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         int rnd = Random.Range(0, sprites.Length);
         GetComponent<SpriteRenderer>().sprite = sprites[rnd];
         _target = GameObject.Find("Player").transform;
@@ -82,6 +85,7 @@ public class EnemyScript : MonoBehaviour
             GetComponent<SpriteRenderer>().sprite = _deathSprite;
             GetComponent<SpriteRenderer>().sortingOrder = -1;
             GetComponent<Collider2D>().enabled = false;
+            _target.GetComponent<PlayerMovement>().GainExperience(5);
             Invoke("EnemyDeath", 1.0f);
 
         }
@@ -93,9 +97,9 @@ public class EnemyScript : MonoBehaviour
 
     private void EnemyDeath()
     {
-        Destroy(transform.GetChild(0).gameObject);
+        _gameManager.SetZombieCount(-1);
+        transform.GetChild(0).gameObject.SetActive(false);
         Destroy(gameObject);
-        _target.GetComponent<PlayerMovement>().GainExperience(5);
     }
 
     public float GetEnemyDamage()
