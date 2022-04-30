@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Text _expText;
     [SerializeField] private float _speed = 0;
     [SerializeField] private float _health = 100;
+    [SerializeField] private float _startHealth;
     [SerializeField] private int _exp = 0;
     
     private float _horizontal;
@@ -26,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _healthWidth = _healthFill.sprite.rect.width;
+        _startHealth = _health;
     }
 
     
@@ -59,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
             transform.GetChild(0).gameObject.SetActive(true);
 
             _health -= collision.gameObject.GetComponent<EnemyScript>().GetEnemyDamage();
-            Vector2 temp = new Vector2(_healthWidth * (_health/100), _healthFill.sprite.rect.height);
+            Vector2 temp = new Vector2(_healthWidth * (_health/_startHealth), _healthFill.sprite.rect.height);
             _healthFill.rectTransform.sizeDelta = temp;
 
             Invoke("HidePlayerBlood", 0.25f);
@@ -70,6 +72,11 @@ public class PlayerMovement : MonoBehaviour
                 _gameOverText.text = "GAME OVER";
             }
         }
+        if (collision.gameObject.CompareTag("Spawner"))
+        {
+            collision.gameObject.GetComponent<SpawnerScript>().GetGeteway();
+        }
+
     }
     private void HidePlayerBlood()
     {

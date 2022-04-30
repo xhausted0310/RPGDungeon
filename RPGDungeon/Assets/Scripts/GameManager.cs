@@ -1,8 +1,11 @@
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameObject[] spawners;
+    [SerializeField] private GameObject[] _spawners;
+    [SerializeField] private GameObject _player;
+    [SerializeField] private GameObject _weapon;
+    [SerializeField] private GameObject _hudCanvas;
 
 
     private int _level = 1;
@@ -11,13 +14,20 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        spawners = GameObject.FindGameObjectsWithTag("Spawner");
-        int rnd = Random.Range(0, spawners.Length);
-        spawners[rnd].GetComponent<SpawnerScript>().SetGeteway(true);
-        foreach(GameObject spawner in spawners)
+        _spawners = GameObject.FindGameObjectsWithTag("Spawner");
+        int rnd = Random.Range(0, _spawners.Length);
+        _spawners[rnd].GetComponent<SpawnerScript>().SetGeteway(true);
+        foreach(GameObject spawner in _spawners)
         {
             spawner.GetComponent<SpawnerScript>().SetHealth(_level + Random.Range(30, 60));
         }
+    }
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(_player.gameObject);
+        DontDestroyOnLoad(_weapon.gameObject);
+        DontDestroyOnLoad(_hudCanvas.gameObject);
     }
 
     public void SetZombieCount(int count)
@@ -33,5 +43,10 @@ public class GameManager : MonoBehaviour
     public int GetZombieLimit()
     {
         return _zombieLimit;
+    }
+
+    public void LoadLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
     }
 }

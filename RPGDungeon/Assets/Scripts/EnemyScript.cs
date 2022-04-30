@@ -44,7 +44,7 @@ public class EnemyScript : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag("Player") && !_isCollide)
+        if (collision.gameObject.CompareTag("Player") && !_isCollide)
         {
             Vector3 contactPoint = collision.contacts[0].point;
             Vector3 center = collision.collider.bounds.center;
@@ -56,16 +56,17 @@ public class EnemyScript : MonoBehaviour
             bool top = contactPoint.y > center.y;
             bool bottom = contactPoint.y < center.y;
 
-            if (right) 
+            if (right)
                 GetComponent<Rigidbody2D>().AddForce(transform.right * _thrust, ForceMode2D.Impulse);
-            if (left) 
+            if (left)
                 GetComponent<Rigidbody2D>().AddForce(-transform.right * _thrust, ForceMode2D.Impulse);
-            if (top) 
+            if (top)
                 GetComponent<Rigidbody2D>().AddForce(transform.up * _thrust, ForceMode2D.Impulse);
-            if (bottom) 
+            if (bottom)
                 GetComponent<Rigidbody2D>().AddForce(-transform.up * _thrust, ForceMode2D.Impulse);
             Invoke("FalseCollision", 0.25f);
         }
+
     }
 
     void FalseCollision()

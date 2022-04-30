@@ -49,21 +49,24 @@ public class SpawnerScript : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        _health -= damage;
-        GetComponent<SpriteRenderer>().color = Color.red;
-        if (_health<=0)
-        {           
-            GetComponent<SpriteRenderer>().sprite = _deathSprite;
-            if(_isGateway)
+        if (GetComponent<SpriteRenderer>().sprite != _geteway)
+        {
+            _health -= damage;
+            GetComponent<SpriteRenderer>().color = Color.red;
+            if (_health <= 0)
             {
-                Invoke("OpenGateway", 0.5f);
+                GetComponent<SpriteRenderer>().sprite = _deathSprite;
+                if (_isGateway)
+                {
+                    Invoke("OpenGateway", 0.5f);
+                }
+                else
+                {
+                    Invoke("DestroyGateway", 0.6f);
+                }
             }
-            else
-            {
-                Invoke("DestroyGateway", 0.6f);
-            }
-        }
             Invoke("DefaultColor", 0.3f);
+        }
     }
 
     private void OpenGateway()
@@ -93,4 +96,11 @@ public class SpawnerScript : MonoBehaviour
         _isGateway = isOpen;
     }
 
+    public void GetGeteway()
+    {
+        if(GetComponent<SpriteRenderer>().sprite == _geteway)
+        {
+            _gameManager.LoadLevel();
+        }
+    }
 }
